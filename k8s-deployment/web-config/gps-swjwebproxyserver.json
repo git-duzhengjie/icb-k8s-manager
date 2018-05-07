@@ -1,0 +1,76 @@
+﻿{
+  "AppSettingConfig": {
+    "AppSettings": [
+      {
+        "Key": "httpPort",
+        "Value": "9099"
+      },
+      {
+        "Key": "DocumentTitle",
+        "Value": "Doc"
+      },
+      {
+        "Key": "IsOpenHelperDoc",
+        "Value": "true"
+      },
+      {
+        "Key": "HostBaseUrl",
+        "Value": "http://192.168.0.216:9099/"
+      }
+    ]
+  },
+  "SimpleSocketConfig": {
+    "ServerTypeNiceName": "IcbTerminalService",
+    "ServerTypeFullName": "ICheBao.Service,ICheBao.Protocols",
+    "KeepAliveTime": 10,
+    "Port": 7000,
+    "ListenBacklog": 2147483647,
+    "MaxConnectionNumber": 65535,
+    "IdleSessionTimeOut": 300,
+    "ClearIdleSessionInterval": 60,
+    "ClearIdleSession": true,
+    "ReceiveBufferSize": 128,
+    "SendBufferSize": 128,
+    "DisableSessionSnapshot": true,
+    "Name": "IcbTerminal",
+    "MaxCompletionPortThreads": 10000,
+    "PerformanceDataCollectInterval": 120,
+    "DisablePerformanceDataCollector": false
+  },
+  "DBConfig": {
+    "DbType": "mysql",
+    "ConnetionString": "server=118.178.133.154;database=minik_com;uid=developer;pwd=developer@COM;|server=118.178.186.154;database=deve_db;uid=developer;pwd=developer@COM;",
+    "RedisConnectionString": "127.0.0.1:6379,abortConnect=false"
+  },
+  "LogConfig": {
+    "LogFileTemplate": "${shortdate}/${logger}.log",
+    "IsAsync": true,
+    "LogBaseDir": "Logs",
+    "LogLevels": "Info" //"Trace",//"Debug",//"Info",//"Warn",//"Error",//"Fatal",//"All"
+  },
+  "redis": {
+    "default": "220.167.101.49:6379,password=idwld%dk@*!ds,abortConnect=false,connectRetry=3,connectTimeout=3000,defaultDatabase=1,syncTimeout=3000,version=3.2.1,responseTimeout=3000"
+  },
+  "mongo": {
+    "default": {
+      "servers": [
+        {
+          "host": "220.167.100.230",
+          "port": 27117
+        },
+        {
+          "host": "220.167.100.81",
+          "port": 27117
+        }
+      ],
+      "credentials": [
+        {
+          "database": "admin",
+          "user": "icb_root",
+          "pwd": "Icb@pwd123+-*/"
+        }
+      ],
+      "timeout": 5000
+    }
+  }
+}

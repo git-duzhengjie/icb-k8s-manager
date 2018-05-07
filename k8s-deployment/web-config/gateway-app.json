@@ -1,0 +1,10 @@
+﻿{
+  "site": "acb.v3.app",
+  "mode": "Test",
+  "config": {
+    "application": "basic,dapper,redis,payment",
+    "uri": "http://10.10.10.5:8888",
+    "username": "icb_config",
+    "password": "config@1233"    
+  }
+}

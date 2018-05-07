@@ -1,0 +1,15 @@
+﻿{
+  "site": "acb.v3.sword",
+  "mode": "Test",
+  "config": {
+    "application": "basic,dapper,redis",
+    "uri": "http://10.10.10.5:8888",
+    "username": "icb_config",
+    "password": "config@1233"
+  },
+  "dapperDefault": "sword",
+  "micro_service": {
+    "host": "micro-sword",
+    "port": 5000
+  }
+}

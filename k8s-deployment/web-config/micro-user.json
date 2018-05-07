@@ -1,0 +1,15 @@
+{
+  "site": "acb.v3.user",
+  "dapperDefault": "icb_main",
+  "mode": "Test",
+  "config": {
+    "application": "basic,dapper,redis,mongo",
+    "uri": "http://10.10.10.5:8888",
+    "username": "icb_config",
+    "password": "config@1233"  
+  },
+  "micro_service": {
+    "host": "micro-user",
+    "port": 5000
+  }
+}

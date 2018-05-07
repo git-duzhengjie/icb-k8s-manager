@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gateway-app
+  namespace: icb
+  labels:
+    app: gateway-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-app
+  template:
+    metadata:
+      labels:
+        app: gateway-app
+    spec:
+      containers:
+      - name: gateway-app
+        image: 10.10.10.3:5000/web/gateway-app:3.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+        - mountPath: /publish/appsettings.json
+          name: web-config
+          subPath: gateway-app.json
+        env:
+          - name: ACB_MODE
+            value: Test
+      volumes:
+      - name: web-config
+        configMap:
+          name: web-config
+          items: 
+          - key: gateway-app.json
+            path: gateway-app.json
+        

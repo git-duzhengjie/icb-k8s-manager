@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: micro-story
+  name: micro-story
+  namespace: icb
+spec:
+  ports:
+    - port: 5000
+      targetPort: 5000
+  selector:
+    app: micro-story
+

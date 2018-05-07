@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: micro-main
+  namespace: icb
+  labels:
+    app: micro-main
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro-main
+  template:
+    metadata:
+      labels:
+        app: micro-main
+    spec:
+      containers:
+      - name: micro-main
+        image: 10.10.10.3:5000/micro-main:3.0
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+        - mountPath: /publish/appsettings.json
+          name: config
+          subPath: appsettings.json
+      volumes:
+      - name: config
+        configMap:
+          name: config
+          items: 
+          - key: appsettings.json
+            path: appsettings.json
+        

@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: micro-sword
+  name: micro-sword
+  namespace: icb
+spec:
+  ports:
+    - port: 5000
+      targetPort: 5000
+  selector:
+    app: micro-sword
+
