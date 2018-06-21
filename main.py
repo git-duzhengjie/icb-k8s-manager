@@ -61,7 +61,7 @@ class IndexHandler(tornado.web.RequestHandler):
                 else:
                     self.write(message_failed)
             else:
-                command = "kubectl delete pod -l app={0} -n icb"\
+                command = "kubectl delete rs -l app={0} -n icb"\
                     .format(service_name)
                 print(command)
                 return_code = subprocess.call(command, shell=True)
