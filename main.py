@@ -16,7 +16,7 @@ import yaml
 from tornado.options import define, options
 
 define("port", default=8088, help="run on the given port", type=int)
-define("image_url", default="192.168.0.230:5000", help="image url", type=int)
+define("image_url", default="192.168.0.230:5000", help="image url", type=str)
 message_success = "{\"message\": \"成功\" }"
 message_failed = "{\"message\": \"失败\" }"
 
@@ -50,7 +50,9 @@ class IndexHandler(tornado.web.RequestHandler):
                 image_name = service_name
             current_version = get_current_version()
             if version != current_version.get(service_name):
-                command = "kubectl set image deployment {0} {0}={1}/{2}:{3} -n icb"\
+                command = "kubectl set image deployment {0} {0}={1}/{2}:{3} -n icb " \
+                          "&& docker service update --image={1}/{2}:{3} {0} " \
+                          "&& docker rm $(docker ps -qa) && docker rmi $(docker images -q)" \
                     .format(service_name, options.image_url, image_name, version)
                 print(command)
                 return_code = subprocess.call(command, shell=True)
@@ -61,8 +63,10 @@ class IndexHandler(tornado.web.RequestHandler):
                 else:
                     self.write(message_failed)
             else:
-                command = "kubectl delete rs -l app={0} -n icb"\
-                    .format(service_name)
+                command = "kubectl delete rs -l app={0} -n icb " \
+                          "&& docker service update --image={1}/{2}:{3} {0} " \
+                          "&& docker rm $(docker ps -qa) && docker rmi $(docker images -q)"\
+                    .format(service_name, options.image_url, image_name, version)
                 print(command)
                 return_code = subprocess.call(command, shell=True)
                 if return_code == 0:
@@ -86,6 +90,10 @@ class IndexHandler(tornado.web.RequestHandler):
         if args[0] == 'version':
             name = self.get_argument("name")
             self.write(get_current_version().get(name, ""))
+
+
+def get_image_name(image_url, image_name, version):
+    return image_url + "/" + image_name + ":" + version
 
 
 if __name__ == '__main__':
