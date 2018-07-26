@@ -7,6 +7,7 @@
 import json
 import os
 import subprocess
+from datetime import datetime
 
 import tornado.httpserver
 import tornado.ioloop
@@ -17,8 +18,9 @@ from tornado.options import define, options
 
 define("port", default=8088, help="run on the given port", type=int)
 define("image_url", default="192.168.0.230:5000", help="image url", type=str)
-message_success = "{\"message\": \"成功\" }"
-message_failed = "{\"message\": \"失败\" }"
+define("namespace", default="icb", help="name space", type=str)
+message_success = {"message": "success"}
+message_failed = {"message": "failed"}
 
 
 def get_env():
@@ -49,27 +51,26 @@ class IndexHandler(tornado.web.RequestHandler):
             if image_name is None:
                 image_name = service_name
             current_version = get_current_version()
-            if version != current_version.get(service_name):
-                command = "kubectl set image deployment {0} {0}={1}/{2}:{3} -n icb " \
-                          "&& docker service update --image={1}/{2}:{3} {0} " \
-                          "&& docker rm $(docker ps -qa) && docker rmi $(docker images -q)" \
-                    .format(service_name, options.image_url, image_name, version)
+            if version != current_version.get(service_name).get("tag"):
+                command = "kubectl set image deployment {0} {0}={1}/{2}:{3} -n {4} " \
+                    .format(service_name, options.image_url, image_name, version, options.namespace)
                 print(command)
                 return_code = subprocess.call(command, shell=True)
                 if return_code == 0:
-                    current_version[service_name] = version
+                    current_version[service_name]["tag"] = version
+                    current_version[service_name]["update_time"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     save_current_version(current_version)
                     self.write(message_success)
                 else:
                     self.write(message_failed)
             else:
-                command = "kubectl delete rs -l app={0} -n icb " \
-                          "&& docker service update --image={1}/{2}:{3} {0} " \
-                          "&& docker rm $(docker ps -qa) && docker rmi $(docker images -q)"\
-                    .format(service_name, options.image_url, image_name, version)
+                command = "kubectl delete rs -l app={0} -n {1} " \
+                    .format(service_name, options.namespace)
                 print(command)
                 return_code = subprocess.call(command, shell=True)
                 if return_code == 0:
+                    current_version[service_name]["update_time"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    save_current_version(current_version)
                     self.write(message_success)
                 else:
                     self.write(message_failed)
